@@ -66,8 +66,7 @@ FROM
 GROUP BY 
 	city
 HAVING
-	-- COUNT(DISTINCT(rankdiff))=1
-    MAX(rankdiff)=0
+	COUNT(DISTINCT(rankdiff))=1
     ;
 
 
