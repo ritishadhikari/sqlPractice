@@ -32,21 +32,22 @@ FROM
 	event_status;
     
 -- 3. Find the Count of ON before it is off
+ 
 SELECT
 	min(event_time) AS startTime,
     max(event_time) AS endTime,
-    COUNT(cond)-1 AS TotalCount
-FROM 
+	COUNT(response)-1 AS numberofIncident
+FROM
 	(
-	SELECT
+	SELECT 
 		*,
-		SUM(CASE WHEN status="on" AND LaggedTime="off" THEN 1 ELSE 0 END) OVER (ORDER BY event_time) AS COND
-	FROM
-	(SELECT
-		*,
-		LAG(status,1,status) OVER(ORDER BY event_time) as LaggedTime
-	FROM 
-		event_status) AS A
-		) AS B
-GROUP BY COND
-    ;
+		SUM(CASE WHEN status="on" AND LaggedTime="off" THEN 1 ELSE 0 END) OVER(ORDER BY event_time) AS response
+	 FROM
+		(
+		SELECT
+				*,
+				LAG(status,1,status) OVER(ORDER BY event_time) as LaggedTime
+			FROM 
+				event_status) AS A) AS B
+GROUP BY 
+	response;

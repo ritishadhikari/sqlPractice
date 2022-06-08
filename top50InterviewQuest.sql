@@ -43,7 +43,7 @@ INSERT INTO Bonus
         (001, 4500, '16-02-20'),
         (002, 3500, '16-06-11');
 
-CREATE TABLE title	(
+CREATE TABLE IF NOT EXISTS title	(
 	worker_ref_id INT,
     worker_title CHAR(25),
     affected_from DATETIME,
@@ -94,7 +94,7 @@ SELECT
 FROM 
 	worker
 WHERE 
-	first_name="Amitabh";
+	first_name="Amitabh";	
 
 -- 6. Write an SQL query to print the FIRST_NAME from Worker table after removing white spaces from the right side.
 SELECT 
@@ -252,8 +252,10 @@ SELECT
     department
 FROM 	
 	worker
-GROUP BY department
-ORDER BY NumberOfWorkers DESC;
+GROUP BY 
+	department
+ORDER BY 
+	NumberOfWorkers DESC;
 
 -- 24.  Write an SQL query to print details of the Workers who are also Managers
 SELECT 
@@ -262,12 +264,11 @@ SELECT
 FROM 
 	worker AS a INNER JOIN
     title AS t
-WHERE 
+ON
 	a.worker_id=t.worker_ref_id AND
     t.worker_title="Manager";
 
 -- 25. Write an SQL query to fetch duplicate records having matching data in some fields of a table
-
 SELECT 
 	COUNT(*) numberOfRecords,
     worker_title,
@@ -294,6 +295,13 @@ WHERE
 					WHERE 
 						MOD(worker_id,2)=1
     );
+-- Alternate and Short
+SELECT 
+	* 
+FROM
+	worker
+WHERE 
+	MOD(worker_id,2)=1;
 
 -- 27. Write an SQL query to show only even rows from a table
 SELECT
@@ -318,18 +326,20 @@ CREATE
 	LIKE
 		worker;
 
+
 -- 29. Write an SQL query to fetch intersecting records of two tables
 SELECT
+	*,
 	a.worker_id
 FROM
 	worker AS a INNER JOIN
     worker AS b
+ON
+	a.WORKER_ID=b.WORKER_ID
 WHERE
-	
 	MOD(a.WORKER_ID,2)=1 AND
-    MOD(b.WORKER_ID,3)=1 AND
-    a.WORKER_ID=b.WORKER_ID
-    ;
+    MOD(b.WORKER_ID,3)=1;
+
 
 -- 30.  Write an SQL query to show records from one table that another table does not have
 -- First Table have all the record while the second table has only records that are divisible by 2
@@ -341,6 +351,23 @@ FROM
 WHERE 
 	MOD(b.worker_id,2)<>1 AND
     a.worker_id=b.worker_id;
+
+-- Alternate
+SELECT 
+	workersA 
+FROM
+	(
+SELECT
+	a.worker_id AS workersA,
+    b.worker_id AS workersB
+FROM 
+	worker AS a LEFT JOIN
+    worker AS b
+ON 
+	a.worker_id=b.worker_id
+) AS C
+WHERE
+	workersB is NULL;
 
 -- 31. Write an SQL query to show the current date and time
 
@@ -366,6 +393,18 @@ ORDER BY
 	salary DESC
 LIMIT 4,1;
 
+
+-- Alternate
+SELECT 
+	*
+FROM (
+		SELECT
+			*,
+			RANK() OVER(ORDER BY salary DESC) AS salaryRank
+		FROM 
+			worker) AS B
+WHERE B.salaryRank=5
+            ;
 
 -- 34. Write an SQL query to determine the 5th highest salary without using TOP or limit method
 
@@ -398,7 +437,8 @@ FROM
 	worker AS a INNER JOIN
     worker AS b
 ON 
-	a.salary=b.salary AND
+	a.salary=b.salary 
+WHERE
     a.first_name<>b.first_name;
     
 -- 36. Write an SQL query to show the second highest salary from a table
@@ -413,15 +453,16 @@ WHERE salary NOT IN (
 					worker
 );
 
--- 37. Write an SQL query to show the second highest salary from a table
+-- 37. Write an SQL query to show the worker_id who are also managers
 SELECT 
-	a.*
+	DISTINCT(a.worker_ref_id)
 FROM 
-	title AS a JOIN title as b
-WHERE 
-	a.worker_title="Manager" AND 
-    b.worker_title="Manager"
-    AND a.worker_title=b.worker_title;
+	title AS a JOIN 
+    title as b
+ON
+	a.worker_title=b.worker_title
+WHERE
+	a.worker_title="Manager";
     
 -- 38. Write an SQL query to fetch intersecting records of two tables.
 -- Repeated
@@ -438,6 +479,7 @@ WHERE
 					FROM
 						worker
             );
+
 
 -- 40. Write an SQL query to fetch the departments that have less than five people in it
 SELECT 
@@ -515,7 +557,25 @@ WHERE
 		worker
 	GROUP BY
 		department) ;
-
+        
+        
+-- Alternate
+SELECT
+	A.first_name,
+    A.department,
+    A.salary
+FROM 
+	worker A
+	JOIN 
+	(SELECT
+		department,
+		MAX(salary) AS maxsalary
+	FROM 
+		worker
+	GROUP BY 
+		department) AS B 
+ON A.salary=B.maxsalary;
+			
 
 SELECT
 	t.first_name,

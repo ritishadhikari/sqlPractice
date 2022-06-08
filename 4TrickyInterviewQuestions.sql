@@ -123,17 +123,18 @@ SELECT
     studentname,
     totalmarks AS presentMarks,
     laggedvalue AS previousMarks,
-	CASE WHEN laggedvalue<totalmarks THEN "Decreased" ELSE "Increased" END AS Result
+	CASE WHEN laggedvalue<totalmarks THEN "Increased" 
+         WHEN laggedvalue>totalmarks THEN "Decreased" END AS Result
 FROM (
 	 SELECT 
 			*,
-			LAG (a.totalMarks,1) OVER(PARTITION BY studentid) AS laggedvalue
+			LAG (a.totalMarks,1) OVER(PARTITION BY studentid ORDER BY testid) AS laggedvalue
 		FROM (
 			 SELECT 
 				studentname,
                 studentid,
 				testid,
-				SUM(marks) AS totalMarks
+				CEIL(AVG(marks)) AS totalMarks
 			FROM 
 				students
 			GROUP BY

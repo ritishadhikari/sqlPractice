@@ -126,7 +126,7 @@ SELECT
 FROM
 	employee;
 
--- 7. Find the Employee who are not present in the Department Table
+-- 7. Find the employee who are not present in the Department Table
 
 SELECT 
 	emp_id,
@@ -181,19 +181,20 @@ FROM
 WHERE 
 	UPPER(customer_name)="SHILPA";
 
--- 10. Self Join, Manager Salary > Employee Salary
-
-SELECT
-	A.*,
-    M.emp_id AS managerID,
-    M.salary AS managerSalary
+-- 10. Self Join, Manager Salary > employee Salary
+SELECT 
+	E.*,
+    M.emp_id,
+    M.salary
 FROM 
-	employee AS A JOIN
+    employee AS E
+    JOIN 
     employee AS M
 ON 
-	A.manager_id=M.emp_id
-WHERE 
-	M.salary>A.salary;
+	E.manager_id=M.emp_id
+WHERE	
+	M.salary>E.salary;
+
     
 -- 11. Update Query to swap Gender
 
