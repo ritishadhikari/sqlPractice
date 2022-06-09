@@ -23,6 +23,30 @@ INSERT INTO
 	(70, CAST('1998-05-06' AS Date), 9, 7, 150),
     (20, CAST('1999-01-30' AS Date), 4, 8, 1800);
 
+SELECT
+	*
+FROM 
+	int_orders;
+    
+SELECT
+	A.*,
+    B.salesperson_id as BSalesPersonId
+FROM 
+    int_orders A
+    JOIN
+    (
+	SELECT
+		salesperson_id,
+		max(amount) maxAmount
+	FROM 
+		intorders
+	GROUP BY
+		salesperson_id) AS B
+ON 
+	A.amount=B.maxAmount
+	AND
+    A.salesperson_id=B.salesperson_id;
+
 -- 3. Find the Largest Order By Value for each salesperson and display order details
 -- Get the result without using subquery, cte, window functions, temp tables
 

@@ -19,6 +19,7 @@ INSERT INTO
     ('d'),
     ('e');
 
+
 -- 3. Rank the Duplicate Records
 WITH
 cte AS (
