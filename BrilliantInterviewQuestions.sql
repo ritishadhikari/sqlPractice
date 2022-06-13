@@ -29,8 +29,7 @@ FROM
 	int_orders;
     
 SELECT
-	A.*,
-    B.salesperson_id as BSalesPersonId
+	A.*
 FROM 
     int_orders A
     JOIN
@@ -45,7 +44,8 @@ FROM
 ON 
 	A.amount=B.maxAmount
 	AND
-    A.salesperson_id=B.salesperson_id;
+    A.salesperson_id=B.salesperson_id
+;
 
 -- 3. Find the Largest Order By Value for each salesperson and display order details
 -- Get the result without using subquery, cte, window functions, temp tables
@@ -64,10 +64,14 @@ GROUP BY
     a.salesperson_id,
     a.amount
 HAVING 
-	a.amount=MAX(b.amount)
+	a.amount>=MAX(b.amount)
 ORDER BY
 	a.salesperson_id;
 
+SELECT
+	*
+FROM 
+	intorders;
+    
 
-    
-    
+	

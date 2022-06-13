@@ -1,5 +1,5 @@
 -- 1. Create Table
-
+USE ORG;
 CREATE TABLE
 	company_users
     (
@@ -68,6 +68,52 @@ WHERE
 HAVING 
 	COUNT(C.company_id)=2
     ;
+
+
+WITH 
+	cte AS(
+SELECT
+	* 
+FROM 
+	company_users
+WHERE	
+	language IN ("English","German")
+    )
+
+SELECT 
+	c.company_id,
+    COUNT(C.company_id) as CountofEmployees
+FROM
+	(
+	SELECT
+		b.*
+	FROM (
+		SELECT 
+			company_id,
+			user_id,
+			Count(user_id) AS languageKnown
+		FROM 
+			cte
+		GROUP BY
+			company_id,
+			user_id
+	) AS b
+	WHERE
+		b.languageKnown=2) AS c
+GROUP BY
+	c.company_id
+HAVING 
+	c.compan
+;
+
+
+
+
+
+
+
+
+
 
 -- Alternate
 
