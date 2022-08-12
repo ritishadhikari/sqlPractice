@@ -137,6 +137,8 @@ ORDER BY
 
 
 -- 10. Use Case 2 : Prepare Large Number of Rows for Performance Testing
+-- We can multiply table records and generate lots of data
+
     
 
 
