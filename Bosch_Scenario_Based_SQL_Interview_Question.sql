@@ -16,6 +16,7 @@ INSERT INTO call_details
 		,('SMS','4535614',1),('OUT','181868',20),('INC','181868',54),('INC','218748',20),('INC','2159010',9)
 		,('INC','197432',66),('SMS','2159010',1),('SMS','4535614',1);
 
+-- Check the Table
 SELECT 
 	*
 FROM 
