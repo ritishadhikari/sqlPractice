@@ -68,5 +68,36 @@ FROM
 	MONTH(thisMonth.order_date)-MONTH(lastMonth.order_date)=1	
 GROUP BY 
 	MONTH(thisMonth.order_date);
-    
 
+
+/*
+	TId Res	TM	NM	NID
+	1	1	1	2	1
+	2	1	1	2	2
+	3	1	1	2	3
+	4	0	1	2	N
+	N	0	1	2	5
+	1	0	2	3	N
+	2	0	2	3	N
+	3	0	2	3	N
+	5	0	2	3	N
+*/
+
+-- Churn Analysis
+SELECT 
+	MONTH(thisMonth.order_date) AS this_month
+	, COUNT(DISTINCT thisMonth.cust_id) AS churn_count
+FROM 
+	transactions1 thisMonth
+	LEFT JOIN
+	transactions1 nextMonth
+	ON
+	thisMonth.cust_id=nextMonth.cust_id
+	AND
+	MONTH(nextMonth.order_date)-MONTH(thisMonth.order_date)=1	
+WHERE 
+	nextMonth.cust_id IS NULL
+GROUP BY 
+	MONTH(thisMonth.order_date);
+	
+	
