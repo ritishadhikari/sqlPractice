@@ -73,7 +73,6 @@ CREATE PROCEDURE
 	pr_buy_products()
 	BEGIN 
 		DECLARE v_product_code VARCHAR(20);
-        
 		DECLARE	v_price FLOAT;
         
 		SELECT 
@@ -90,7 +89,7 @@ CREATE PROCEDURE
         INSERT INTO sales
 			(order_id,order_date, product_code, quantity_ordered, sale_price)
             VALUES
-				(RAND(3), CURRENT_DATE, v_product_code, 1, (v_price*1) );
+				(RAND(), CURRENT_DATE, v_product_code, 1, (v_price*1) );
 		
         UPDATE 
 			products
