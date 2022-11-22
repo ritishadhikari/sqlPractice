@@ -51,7 +51,8 @@ ON
 -- Get the result without using subquery, cte, window functions, temp tables
 
 SELECT 
-	a.*
+	a.*,
+    b.amount as b_amount
 FROM 
 	intorders AS a LEFT JOIN
     intorders AS b

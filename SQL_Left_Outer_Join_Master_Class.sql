@@ -102,7 +102,8 @@ WHERE
 -- 7. Give all the Employees whose Department is not present in Department Table
 
 SELECT 
-	emp1.*
+	emp1.*,
+    DEPt1.dep_id as S
 FROM 
 	emp1
     LEFT JOIN 

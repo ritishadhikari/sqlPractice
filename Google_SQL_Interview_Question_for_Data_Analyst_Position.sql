@@ -103,7 +103,7 @@ FROM
 GROUP BY
 	c.company_id
 HAVING 
-	c.compan
+	c.company_id=1
 ;
 
 
@@ -148,23 +148,26 @@ HAVING
 	COUNT(company_id)>=2;
 
 -- Ankit's Solution
-
-SELECT
+SELECT 
+	A.company_id,
+    COUNT(A.user_id) AS numberOfUsers
+FROM
+	(
+		SELECT
+			company_id,
+			user_id,
+			Count(user_id) AS LangKnown
+		FROM
+			company_users
+		WHERE 
+			language IN ("English","German")
+		GROUP BY
+			company_id,
+			user_id
+		HAVING
+			LangKnown=2
+	) AS A
+GROUP BY 
 	A.company_id
-FROM
-(SELECT
-	company_id,
-    user_id,
-    Count(user_id) AS LangKnown
-FROM
-	company_users
-WHERE 
-	language IN ("English","German")
-GROUP BY
-	company_id,
-    user_id
-HAVING
-	LangKnown=2)
-    AS a
-HAVING COUNT(A.user_id)>2
-    ;
+HAVING 
+	COUNT(A.user_id)=2;
